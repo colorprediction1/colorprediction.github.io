@@ -6,14 +6,88 @@
     <title>Document</title>
 </head>
 <body>
-    <h1><h2>hii my name is praveen pal</h2>
-        <h3>hii my name is praveen pal</h3>
-        <h4>hii my name is praveen pal</h4>
-        <h5>hii my name is praveen pal</h5>
-hii my name is praveen pal
-</h1>
+
+
+    import tkinter as tk
+import random
+
+# List of possible colors
+colors = ['Red', 'Blue', 'Green', 'Pink', 'Black', 'Yellow', 'Orange', 'White', 'Purple', 'Brown']
+
+# Initialize score and time
+score = 0
+timeleft = 30
+
+# Function to start the game
+def startGame(event):
+    if timeleft == 30:
+        countdown()
+    nextColor()
+
+# Function to display the next color
+def nextColor():
+    global score
+    global timeleft
+
+    if timeleft > 0:
+        entry.focus_set()
+
+        if entry.get().lower() == colors[1].lower():
+            score += 1
+
+        entry.delete(0, tk.END)
+        random.shuffle(colors)
+
+        label.config(fg=str(colors[1]), text=str(colors[0]))
+        scoreLabel.config(text="Score: " + str(score))
+
+# Countdown timer function
+def countdown():
+    global timeleft
+
+    if timeleft > 0:
+        timeleft -= 1
+        timeLabel.config(text="Time left: " + str(timeleft))
+        timeLabel.after(1000, countdown)
+
+# Create GUI window
+root = tk.Tk()
+root.title("Color Prediction Game")
+root.geometry("400x200")
+
+# Instruction label
+instructions = tk.Label(root, text="Type the color of the words, not the word itself!", font=('Helvetica', 12))
+instructions.pack()
+
+# Score label
+scoreLabel = tk.Label(root, text="Score: 0", font=('Helvetica', 12))
+scoreLabel.pack()
+
+# Time left label
+timeLabel = tk.Label(root, text="Time left: 30", font=('Helvetica', 12))
+timeLabel.pack()
+
+# Color word label
+label = tk.Label(root, font=('Helvetica', 60))
+label.pack()
+
+# Entry box
+entry = tk.Entry(root)
+entry.pack()
+entry.bind('<Return>', startGame)
+
+# Focus the entry box when app starts
+entry.focus_set()
+
+# Start the GUI event loop
+root.mainloop()
+
+
+
+
     
 </body>
 
 </html>
+
 
