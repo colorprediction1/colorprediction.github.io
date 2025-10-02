@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parity Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .balance-section {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .balance {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .recharge {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .rules {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .game-options {
+            display: flex;
+            background: #ecf0f1;
+            padding: 10px;
+            justify-content: space-around;
+        }
+        
+        .game-option {
+            padding: 8px 15px;
+            background: #3498db;
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .current-period {
+            text-align: center;
+            padding: 15px;
+            background: #2980b9;
+            color: white;
+        }
+        
+        .bet-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background: #ecf0f1;
+        }
+        
+        .color-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .green { background: #27ae60; }
+        .violet { background: #9b59b6; }
+        .red { background: #e74c3c; }
+        
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 20px;
+            background: white;
+        }
+        
+        .number-btn {
+            padding: 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            background: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .number-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+        
+        .history {
+            background: white;
+            padding: 15px;
+        }
+        
+        .history-title {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .history-table th, .history-table td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .history-table th {
+            background: #34495e;
+            color: white;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-around;
+            background: #2c3e50;
+            padding: 15px;
+        }
+        
+        .nav-btn {
+            color: white;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .nav-btn.active {
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h2>Parity Game</h2>
+        </div>
+        
+        <!-- Balance Section -->
+        <div class="balance-section">
+            <div>Available Balance</div>
+            <div class="balance">₹0.00</div>
+            <div class="buttons">
+                <button class="btn recharge">Recharge</button>
+                <button class="btn rules">Read Rules</button>
+            </div>
+        </div>
+        
+        <!-- Game Options -->
+        <div class="game-options">
+            <div class="game-option">Parity</div>
+            <div class="game-option">Sapre</div>
+            <div class="game-option">Boone</div>
+            <div class="game-option">Emerd</div>
+        </div>
+        
+        <!-- Current Period -->
+        <div class="current-period">
+            <div>Period: <span id="period">20240131131</span></div>
+        </div>
+        
+        <!-- Bet Buttons -->
+        <div class="bet-buttons">
+            <button class="color-btn green" onclick="placeBet('green')">Join Green</button>
+            <button class="color-btn violet" onclick="placeBet('violet')">Join Violet</button>
+            <button class="color-btn red" onclick="placeBet('red')">Join Red</button>
+        </div>
+        
+        <!-- Number Grid -->
+        <div class="number-grid">
+            <button class="number-btn" onclick="selectNumber(0)">0</button>
+            <button class="number-btn" onclick="selectNumber(1)">1</button>
+            <button class="number-btn" onclick="selectNumber(2)">2</button>
+            <button class="number-btn" onclick="selectNumber(3)">3</button>
+            <button class="number-btn" onclick="selectNumber(4)">4</button>
+            <button class="number-btn" onclick="selectNumber(5)">5</button>
+            <button class="number-btn" onclick="selectNumber(6)">6</button>
+            <button class="number-btn" onclick="selectNumber(7)">7</button>
+            <button class="number-btn" onclick="selectNumber(8)">8</button>
+            <button class="number-btn" onclick="selectNumber(9)">9</button>
+        </div>
+        
+        <!-- History -->
+        <div class="history">
+            <div class="history-title">Parity Record</div>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Price</th>
+                        <th>Number</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body">
+                    <!-- History will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="navigation">
+            <div class="nav-btn active">Home</div>
+            <div class="nav-btn">Search</div>
+            <div class="nav-btn">Win</div>
+            <div class="nav-btn">My</div>
+        </div>
+    </div>
+
+    <script>
+        // Sample history data
+        const historyData = [
+            { period: "20240131130", price: "35374", number: "4", result: "" },
+            { period: "20240131129", price: "34051", number: "1", result: "" },
+            { period: "20240131128", price: "38498", number: "8", result: "" },
+            { period: "20240131127", price: "31268", number: "8", result: "" },
+            { period: "20240131126", price: "36886", number: "6", result: "" },
+            { period: "20240131125", price: "34932", number: "2", result: "" }
+        ];
+
+        // Initialize history table
+        function initializeHistory() {
+            const historyBody = document.getElementById('history-body');
+            historyBody.innerHTML = '';
+            
+            historyData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.period}</td>
+                    <td>${item.price}</td>
+                    <td>${item.number}</td>
+                    <td>${item.result}</td>
+                `;
+                historyBody.appendChild(row);
+            });
+        }
+
+        // Place bet function
+        function placeBet(color) {
+            alert(You selected ${color.toUpperCase()} color!);
+            // Add your betting logic here
+        }
+
+        // Select number function
+        function selectNumber(number) {
+            alert(You selected number: ${number});
+            // Add your number selection logic here
+        }
+
+        // Initialize the game
+        initializeHistory();
+
+        // Add click event to navigation buttons
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Add click event to recharge and rules buttons
+        document.querySelector('.recharge').addEventListener('click', function() {
+            alert('Recharge functionality would go here');
+        });
+
+        document.querySelector('.rules').addEventListener('click', function() {
+            alert('Game Rules:\n1. Select a color or number\n2. Place your bet\n3. Wait for results\n4. Win based on the outcome');
+        });
+    </script>
+</body>
+</html>
