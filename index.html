@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parity Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>🎯 Parity Game</h2>
+            <button class="admin-btn" onclick="goToAdmin()">Admin</button>
+        </div>
+        
+        <div class="balance-section">
+            <div>Available Balance</div>
+            <div class="balance">₹<span id="balanceAmount">1000.00</span></div>
+            <div class="buttons">
+                <button class="btn recharge" onclick="addMoney()">Recharge</button>
+                <button class="btn rules" onclick="showRules()">Rules</button>
+            </div>
+        </div>
+        
+        <div class="game-options">
+            <div class="game-option active">Parity Game</div>
+        </div>
+        
+        <div class="current-period">
+            <div>Period: <span id="period">20240131131</span></div>
+            <div class="timer" id="timer">60s</div>
+        </div>
+
+        <div class="bet-info" id="betInfo">No bet placed</div>
+        
+        <div class="bet-buttons">
+            <button class="color-btn green" onclick="openBetModal('green')">Green</button>
+            <button class="color-btn violet" onclick="openBetModal('violet')">Violet</button>
+            <button class="color-btn red" onclick="openBetModal('red')">Red</button>
+        </div>
+        
+        <div class="number-grid">
+            <button class="number-btn" onclick="openBetModal(0)">0</button>
+            <button class="number-btn" onclick="openBetModal(1)">1</button>
+            <button class="number-btn" onclick="openBetModal(2)">2</button>
+            <button class="number-btn" onclick="openBetModal(3)">3</button>
+            <button class="number-btn" onclick="openBetModal(4)">4</button>
+            <button class="number-btn" onclick="openBetModal(5)">5</button>
+            <button class="number-btn" onclick="openBetModal(6)">6</button>
+            <button class="number-btn" onclick="openBetModal(7)">7</button>
+            <button class="number-btn" onclick="openBetModal(8)">8</button>
+            <button class="number-btn" onclick="openBetModal(9)">9</button>
+        </div>
+        
+        <div class="history">
+            <div class="history-title">Game History</div>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Number</th>
+                        <th>Color</th>
+                    </tr>
+                </thead>
+                <tbody id="historyBody">
+                    <!-- History will be loaded by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="navigation">
+            <div class="nav-btn active">Home</div>
+            <div class="nav-btn" onclick="showWinHistory()">Win</div>
+            <div class="nav-btn" onclick="showProfile()">My</div>
+        </div>
+    </div>
+
+    <!-- Bet Modal -->
+    <div id="betModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Place Bet</h3>
+            <div class="bet-options">
+                <button class="bet-amount-btn" onclick="setAmount(10)">₹10</button>
+                <button class="bet-amount-btn" onclick="setAmount(50)">₹50</button>
+                <button class="bet-amount-btn" onclick="setAmount(100)">₹100</button>
+            </div>
+            <div class="amount-control">
+                <button class="amount-btn" onclick="changeAmount(-10)">-</button>
+                <div class="amount-display" id="currentAmount">₹10</div>
+                <button class="amount-btn" onclick="changeAmount(10)">+</button>
+                <button class="amount-btn double-btn" onclick="doubleAmount()">2X</button>
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                <button class="action-btn confirm-btn" onclick="placeBet()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

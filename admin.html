@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Parity Game</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="admin-header">
+            <h1>🔧 Admin Panel - Parity Game</h1>
+            <button class="back-btn" onclick="goToGame()">Back to Game</button>
+        </div>
+
+        <!-- Admin Login -->
+        <div id="loginSection" class="login-section">
+            <div class="login-form">
+                <h2>Admin Login</h2>
+                <input type="password" id="adminPassword" placeholder="Enter Admin Password" class="login-input">
+                <button onclick="loginAdmin()" class="login-btn">Login</button>
+                <p class="login-note">Default Password: admin123</p>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="dashboard" class="dashboard" style="display: none;">
+            
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Players</h3>
+                    <div class="stat-value" id="totalPlayers">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Games</h3>
+                    <div class="stat-value" id="totalGames">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Bets</h3>
+                    <div class="stat-value" id="totalBets">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Profit</h3>
+                    <div class="stat-value" id="totalProfit">₹0</div>
+                </div>
+            </div>
+
+            <!-- Game Control -->
+            <div class="control-section">
+                <h2>Game Control</h2>
+                <div class="control-buttons">
+                    <button onclick="startGame()" class="control-btn start">Start Game</button>
+                    <button onclick="stopGame()" class="control-btn stop">Stop Game</button>
+                    <button onclick="resetGame()" class="control-btn reset">Reset Game</button>
+                    <button onclick="manualResult()" class="control-btn manual">Manual Result</button>
+                </div>
+            </div>
+
+            <!-- Manual Result Section -->
+            <div class="manual-section">
+                <h2>Manual Result Setup</h2>
+                <div class="manual-controls">
+                    <select id="manualNumber" class="number-select">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                    <button onclick="setManualResult()" class="set-btn">Set Result</button>
+                </div>
+            </div>
+
+            <!-- Game Settings -->
+            <div class="settings-section">
+                <h2>Game Settings</h2>
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label>Game Timer (seconds)</label>
+                        <input type="number" id="gameTimer" value="60" min="30" max="120" class="setting-input">
+                    </div>
+                    <div class="setting-item">
+                        <label>Minimum Bet</label>
+                        <input type="number" id="minBet" value="10" min="1" max="100" class="setting-input">
+                    </div>
+                    <div class="setting-item">
+                        <label>Maximum Bet</label>
+                        <input type="number" id="maxBet" value="1000" min="100" max="10000" class="setting-input">
+                    </div>
+                    <div class="setting-item">
+                        <label>Admin Password</label>
+                        <input type="password" id="newPassword" placeholder="New Password" class="setting-input">
+                    </div>
+                </div>
+                <button onclick="saveSettings()" class="save-btn">Save Settings</button>
+            </div>
+
+            <!-- Game History -->
+            <div class="history-section">
+                <h2>Game History</h2>
+                <div class="history-controls">
+                    <button onclick="clearHistory()" class="clear-btn">Clear History</button>
+                    <button onclick="exportData()" class="export-btn">Export Data</button>
+                </div>
+                <div class="history-table-container">
+                    <table class="admin-history-table">
+                        <thead>
+                            <tr>
+                                <th>Period</th>
+                                <th>Number</th>
+                                <th>Color</th>
+                                <th>Timestamp</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminHistoryBody">
+                            <!-- History will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- User Management -->
+            <div class="users-section">
+                <h2>User Management</h2>
+                <div class="users-list" id="usersList">
+                    <!-- Users will be listed here -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
