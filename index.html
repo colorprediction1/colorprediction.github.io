@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - Play & Win</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0f3460;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-top: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 15px 0;
+            border-bottom: 2px solid #e94560;
+            margin-bottom: 20px;
+        }
+
+        .time-balance {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a2e;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .time {
+            color: #e94560;
+            font-weight: bold;
+        }
+
+        .balance {
+            background: #e94560;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-recharge {
+            background: linear-gradient(45deg, #e94560, #ff6b8b);
+            color: white;
+        }
+
+        .btn-rule {
+            background: linear-gradient(45deg, #533483, #8a4fff);
+            color: white;
+        }
+
+        .game-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px;
+            text-align: center;
+            background: #1a1a2e;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .tab.active {
+            background: #e94560;
+            transform: scale(1.05);
+        }
+
+        .period-section {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #533483;
+            position: relative;
+        }
+
+        .period-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .period-label {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .period-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e94560;
+        }
+
+        .refresh-btn {
+            background: #533483;
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .countdown {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00b894;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0, 184, 148, 0.1);
+            border-radius: 8px;
+            border: 2px solid #00b894;
+            transition: all 0.3s ease;
+        }
+
+        .countdown.locked {
+            color: #e94560;
+            border-color: #e94560;
+            background: rgba(233, 69, 96, 0.1);
+        }
+
+        .lock-message {
+            font-size: 12px;
+            color: #e94560;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .color-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .color-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-green {
+            background: linear-gradient(45deg, #00b894, #00d8a3);
+        }
+
+        .btn-violet {
+            background: linear-gradient(45deg, #6c5ce7, #8a7cff);
+        }
+
+        .btn-red {
+            background: linear-gradient(45deg, #e94560, #ff6b8b);
+        }
+
+        .color-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: scale(0.95);
+        }
+
+        .number-pad {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .number {
+            background: #1a1a2e;
+            padding: 15px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .number::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--color1), var(--color2));
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .number-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Number Colors as per requirements */
+        .number.green { 
+            --color1: #00b894;
+            --color2: #00d8a3;
+            border-color: #00b894;
+        }
+        
+        .number.red { 
+            --color1: #e94560;
+            --color2: #ff6b8b;
+            border-color: #e94560;
+        }
+        
+        .number.half-violet-green { 
+            --color1: #6c5ce7;
+            --color2: #00b894;
+            border-color: #6c5ce7;
+        }
+        
+        .number.half-red-violet { 
+            --color1: #e94560;
+            --color2: #6c5ce7;
+            border-color: #e94560;
+        }
+
+        .number:hover:not(.disabled) {
+            transform: scale(1.1);
+        }
+
+        .number.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: scale(0.95);
+        }
+
+        .number.selected {
+            box-shadow: 0 0 20px currentColor;
+            transform: scale(1.15);
+        }
+
+        .history-section {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .history-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #e94560;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-all {
+            background: #533483;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table th {
+            background: #533483;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .history-table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #0f3460;
+            font-size: 12px;
+        }
+
+        .result {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result.half-violet-green {
+            background: linear-gradient(45deg, #6c5ce7 50%, #00b894 50%);
+        }
+
+        .result.half-red-violet {
+            background: linear-gradient(45deg, #e94560 50%, #6c5ce7 50%);
+        }
+
+        .result-green { background: #00b894; }
+        .result-red { background: #e94560; }
+        .result-violet { background: #6c5ce7; }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f3460;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 10px;
+            border-top: 2px solid #e94560;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            text-align: center;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: #e94560;
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes countdownPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .countdown-pulse {
+            animation: countdownPulse 1s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎮 GameHub</h1>
+            <p>Play Smart, Win Big!</p>
+        </div>
+
+        <!-- Time and Balance -->
+        <div class="time-balance">
+            <div class="time">🕒 <span id="currentTime">6:31 AM</span> | 0.0KB/s</div>
+            <div class="balance">₹<span id="balanceAmount">0.00</span></div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-recharge">💳 Recharge</button>
+            <button class="btn btn-rule">📖 Read Rule</button>
+        </div>
+
+        <!-- Game Tabs -->
+        <div class="game-tabs">
+            <div class="tab active">Parity</div>
+            <div class="tab">Sapre</div>
+            <div class="tab">Boone</div>
+            <div class="tab">Emerd</div>
+        </div>
+
+        <!-- Period Section with Countdown -->
+        <div class="period-section">
+            <div class="period-info">
+                <div class="period-label">Period</div>
+                <div class="period-number">20240131131</div>
+                <button class="refresh-btn" id="refreshBtn">🔄 Refresh</button>
+            </div>
+            <div class="countdown" id="countdown">01:00</div>
+            <div class="lock-message" id="lockMessage"></div>
+        </div>
+
+        <!-- Color Selection Buttons -->
+        <div class="color-buttons">
+            <button class="color-btn btn-green" id="greenBtn">🟢 Join Green</button>
+            <button class="color-btn btn-violet" id="violetBtn">🟣 Join Violet</button>
+            <button class="color-btn btn-red" id="redBtn">🔴 Join Red</button>
+        </div>
+
+        <!-- Number Pad with Special Colors -->
+        <div class="number-pad">
+            <!-- 0 - Half Red Violet -->
+            <div class="number half-red-violet" data-number="0">
+                <div class="number-content">0</div>
+            </div>
+            <!-- 1 - Green -->
+            <div class="number green" data-number="1">
+                <div class="number-content">1</div>
+            </div>
+            <!-- 2 - Red -->
+            <div class="number red" data-number="2">
+                <div class="number-content">2</div>
+            </div>
+            <!-- 3 - Green -->
+            <div class="number green" data-number="3">
+                <div class="number-content">3</div>
+            </div>
+            <!-- 4 - Red -->
+            <div class="number red" data-number="4">
+                <div class="number-content">4</div>
+            </div>
+            <!-- 5 - Half Violet Green -->
+            <div class="number half-violet-green" data-number="5">
+                <div class="number-content">5</div>
+            </div>
+            <!-- 6 - Red -->
+            <div class="number red" data-number="6">
+                <div class="number-content">6</div>
+            </div>
+            <!-- 7 - Green -->
+            <div class="number green" data-number="7">
+                <div class="number-content">7</div>
+            </div>
+            <!-- 8 - Red -->
+            <div class="number red" data-number="8">
+                <div class="number-content">8</div>
+            </div>
+            <!-- 9 - Green -->
+            <div class="number green" data-number="9">
+                <div class="number-content">9</div>
+            </div>
+        </div>
+
+        <!-- History Section -->
+        <div class="history-section">
+            <div class="history-title">
+                <span>Parity Record</span>
+                <button class="view-all" id="viewAllBtn">View All</button>
+            </div>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Price</th>
+                        <th>Number</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody id="recentHistory">
+                    <!-- History will be loaded dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">🏠 Home</div>
+        <div class="nav-item">🔍 Search</div>
+        <div class="nav-item">🏆 Win</div>
+        <div class="nav-item">👤 My</div>
+    </div>
+
+    <script>
+        // Game State
+        let countdownTime = 60;
+        let countdownInterval;
+        let isLocked = false;
+        let selectedNumber = null;
+        let selectedColor = null;
+
+        // Countdown Timer
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            const lockMessage = document.getElementById('lockMessage');
+            
+            countdownInterval = setInterval(() => {
+                countdownTime--;
+                
+                // Update countdown display
+                const minutes = Math.floor(countdownTime / 60);
+                const seconds = countdownTime % 60;
+                countdownElement.textContent = ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')};
+                
+                // Check for lock time (10 seconds remaining)
+                if (countdownTime === 10 && !isLocked) {
+                    lockGame();
+                }
+                
+                // Visual effects
+                if (countdownTime <= 10) {
+                    countdownElement.classList.add('countdown-pulse');
+                    countdownElement.style.color = '#e94560';
+                    countdownElement.classList.add('locked');
+                    lockMessage.textContent = '🔒 Betting Locked - Result Time';
+                } else if (countdownTime <= 30) {
+                    countdownElement.classList.add('countdown-pulse');
+                    countdownElement.style.color = '#ff9f43';
+                } else {
+                    countdownElement.classList.remove('countdown-pulse');
+                    countdownElement.style.color = '#00b894';
+                    countdownElement.classList.remove('locked');
+                    lockMessage.textContent = '';
+                }
+                
+                // Reset when time reaches 0
+                if (countdownTime <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.textContent = 'Time Up!';
+                    countdownElement.style.background = '#e94560';
+                    lockMessage.textContent = '🎉 Calculating Result...';
+                    
+                    // Show result and reset after 3 seconds
+                    setTimeout(() => {
+                        showResult();
+                        resetGame();
+                    }, 3000);
+                }
+            }, 1000);
+        }
+
+        // Lock Game Function
+        function lockGame() {
+            isLocked = true;
+            
+            // Disable number buttons
+            const numbers = document.querySelectorAll('.number');
+            numbers.forEach(number => {
+                number.classList.add('disabled');
+            });
+            
+            // Disable color buttons
+            const colorBtns = document.querySelectorAll('.color-btn');
+            colorBtns.forEach(btn => {
+                btn.classList.add('disabled');
+            });
+            
+            // Show lock message
+            const lockMessage = document.getElementById('lockMessage');
+            lockMessage.textContent = '🔒 Betting Locked - Result Time';
+            lockMessage.style.color = '#e94560';
+        }
+
+        // Unlock Game Function
+        function unlockGame() {
+            isLocked = false;
+            
+            // Enable number buttons
+            const numbers = document.querySelectorAll('.number');
+            numbers.forEach(number => {
+                number.classList.remove('disabled');
+            });
+            
+            // Enable color buttons
+            const colorBtns = document.querySelectorAll('.color-btn');
+            colorBtns.forEach(btn => {
+                btn.classList.remove('disabled');
+            });
+            
+            // Clear lock message
+            const lockMessage = document.getElementById('lockMessage');
+            lockMessage.textContent = '';
+        }
+
+        // Show Result
+        function showResult() {
+            // Generate random result
+            const resultNumber = Math.floor(Math.random() * 10);
+            let resultColor;
+            
+            // Determine color based on number
+            if ([1, 3, 7, 9].includes(resultNumber)) {
+                resultColor = 'green';
+            } else if ([2, 4, 6, 8].includes(resultNumber)) {
+                resultColor = 'red';
+            } else if (resultNumber === 5) {
+                resultColor = 'half-violet-green';
+            } else { // 0
+                resultColor = 'half-red-violet';
+            }
+            
+            // Add to history
+            addToHistory(resultNumber, resultColor);
+            
+            // Check if user won
+            if (selectedNumber === resultNumber || selectedColor === resultColor) {
+                alert(🎉 Congratulations! You won! Result: ${resultNumber});
+                // Update balance
+                const currentBalance = parseFloat(document.getElementById('balanceAmount').textContent);
+                document.getElementById('balanceAmount').textContent = (currentBalance + 50).toFixed(2);
+            } else if (selectedNumber !== null || selectedColor !== null) {
+                alert(😔 Better luck next time! Result: ${resultNumber});
+            }
+        }
+
+        // Reset Game
+        function resetGame() {
+            countdownTime = 60;
+            selectedNumber = null;
+            selectedColor = null;
+            
+            // Reset UI
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.classList.rem
